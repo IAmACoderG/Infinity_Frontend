@@ -1,6 +1,8 @@
 import Home from "./Home";
-import User from "./User";
+import MyProfile from "./MyProfile";
+import UserProfile from "./UserProfile"
 import SignUp from "./SignUp";
 import Login from "./Login";
+import NewPost from "./AddNewPost";
 
-export { Home, User, SignUp, Login };
+export { Home, MyProfile, UserProfile, SignUp, Login, NewPost };

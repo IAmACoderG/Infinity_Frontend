@@ -1,8 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const initialState = {};
+const initialState = { isAuthenticated: false };
 
-const userSlice = createSlice({
+export const userSlice = createSlice({
     name: "user",
     initialState,
     reducers: {
@@ -14,10 +14,12 @@ const userSlice = createSlice({
         loginSuccess: (state, action) => {
             state.loading = false;
             state.user = action.payload;
+            state.isAuthenticated = true;
         },
         loginFailure: (state, action) => {
             state.loading = false;
             state.error = action.payload;
+            state.isAuthenticated = false;
         },
 
         //SignUp ...>>>
@@ -27,26 +29,44 @@ const userSlice = createSlice({
         signupSuccess: (state, action) => {
             state.loading = false;
             state.user = action.payload;
+            state.isAuthenticated = true;
         },
         signupFailure: (state, action) => {
             state.loading = false;
             state.error = action.payload;
+            state.isAuthenticated = false;
         },
 
-        //loading ...>>>
-        loadingRequest: (state) => {
+        //load User if logged In ...>>>
+        loadUserRequest: (state) => {
             state.loading = true;
         },
-        loadingSuccess: (state, action) => {
+        loadUserSuccess: (state, action) => {
             state.loading = false;
             state.user = action.payload;
+            state.isAuthenticated = true;
         },
-        loadingFailure: (state, action) => {
+        loadUserFailure: (state, action) => {
             state.loading = false;
             state.error = action.payload;
+            state.isAuthenticated = false;
+        },
+        //logOut User ...>>>
+        logOutRequest: (state) => {
+            state.loading = true;
+        },
+        logOutSuccess: (state) => {
+            state.loading = false;
+            state.user = null;
+            state.isAuthenticated = false;
+        },
+        logOutFailure: (state, action) => {
+            state.loading = false;
+            state.error = action.payload;
+            state.isAuthenticated = true;
         },
 
     }
 })
-export const { loginRequest, loginSuccess, loginFailure, signupRequest, signupSuccess, signupFailure, loadingRequest, loadingSuccess, loadingFailure } = userSlice.actions;
+export const { loginRequest, loginSuccess, loginFailure, signupRequest, signupSuccess, signupFailure, loadUserRequest, loadUserSuccess, loadUserFailure, logOutFailure, logOutRequest, logOutSuccess } = userSlice.actions;
 export default userSlice.reducer;

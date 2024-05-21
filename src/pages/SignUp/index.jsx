@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 const SignUp = () => {
   return (
-    <div className="min-h-[70vh] bg-gradient-to-r from-pink-950 to to-blue-950 flex items-center justify-center">
+    <div className="min-h-[100vh] bg-gradient-to-r from-pink-950 to to-blue-950 flex items-center justify-center">
       <div className="flex items-center flex-col gap-y-4 min-h-[50vh] min-w-[60vw] border-2 border-white rounded-md">
         <h3 className="py-5 text-3xl text-white">Create Account</h3>
         <div className="flex flex-col w-[50vw]">

@@ -5,7 +5,9 @@ import "./index.css";
 import { Provider } from "react-redux";
 import store from "./redux/app/store";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import { Home, Login, SignUp, User } from "./pages";
+import { Home, Login, NewPost, SignUp, MyProfile, UserProfile } from "./pages";
+import { AuthProtectionLayout } from "./components";
+import Search from "./pages/Search/index.jsx";
 
 const router = createBrowserRouter([
   {
@@ -14,19 +16,59 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <Home />,
+        element: (
+          <AuthProtectionLayout authentication>
+            <Home />
+          </AuthProtectionLayout>
+        ),
       },
       {
-        path: "/user",
-        element: <User />,
+        path: "/my-profile",
+        element: (
+          <AuthProtectionLayout authentication>
+            <MyProfile />
+          </AuthProtectionLayout>
+        ),
+      },
+      {
+        path: "/users/:id",
+        element: (
+          <AuthProtectionLayout authentication>
+            <UserProfile />
+          </AuthProtectionLayout>
+        ),
+      },
+      {
+        path: "/new-post",
+        element: (
+          <AuthProtectionLayout authentication>
+            <NewPost />
+          </AuthProtectionLayout>
+        ),
+      },
+      {
+        path: "/search",
+        element: (
+          <AuthProtectionLayout authentication>
+            <Search />
+          </AuthProtectionLayout>
+        ),
       },
       {
         path: "/signup",
-        element: <SignUp />,
+        element: (
+          <AuthProtectionLayout authentication={false}>
+            <SignUp />
+          </AuthProtectionLayout>
+        ),
       },
       {
         path: "/login",
-        element: <Login />,
+        element: (
+          <AuthProtectionLayout authentication={false}>
+            <Login />
+          </AuthProtectionLayout>
+        ),
       },
     ],
   },
