@@ -8,5 +8,7 @@ import DotBox from "./DotBox"
 import LikeBox from "./LikeBox"
 import CommentBox from "./CommentBox"
 import AccountManager from "./AccountManager"
+import FollowingBox from "./FollowingBox"
+import FollowerBox from "./FollowerBox"
 
-export { Header, Footer, User, Post, AuthProtectionLayout, Loader, DotBox, CommentBox, LikeBox, AccountManager }
+export { Header, Footer, User, Post, AuthProtectionLayout, Loader, DotBox, CommentBox, LikeBox, AccountManager, FollowerBox, FollowingBox }

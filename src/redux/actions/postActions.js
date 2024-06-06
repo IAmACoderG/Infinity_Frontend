@@ -29,7 +29,7 @@ export const likePost = (id) => async (dispatch) => {
 export const commentOnPost = (id, comment) => async (dispatch) => {
     try {
         dispatch(commentsRequest());
-        const { data } = await axiosInstance.get(`api/v1/posts/comment/${id}`, { comment }, { headers: { "Content-Type": "application/json" } });
+        const { data } = await axiosInstance.post(`api/v1/posts/accessed_Id/${id}`, { comment }, { headers: { "Content-Type": "application/json" } });
         dispatch(commentsSuccess(data.message));
     } catch (error) {
         dispatch(commentsFailure(error.response.data.message));

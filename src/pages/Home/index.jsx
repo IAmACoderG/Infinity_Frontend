@@ -19,7 +19,7 @@ const Home = () => {
     dispatch(getAllUsers());
   }, []);
   return !loading || !userLoading ? (
-    <div className="min-h-[100vh] ml-[257px] text-white w-[85vw] bg-blue-950 grid grid-cols-[1fr,25vw]">
+    <div className="min-h-[100vh] ml-[257px] text-white w-[85vw] bg-blue-950 m-auto xl:grid xl:grid-cols-[1fr,25vw]">
       <div className="bg-gradient-to-r from-pink-300 to-blue-300 m-1 rounded-md">
         {posts && posts.length > 0 ? (
           posts.map((post) => (
@@ -39,7 +39,7 @@ const Home = () => {
           <div className="flex justify-center items-center "> No Post Yet</div>
         )}
       </div>
-      <div className="bg-blue-950 m-1 my-5 rounded-md">
+      <div className="bg-blue-950 m-1 my-5 rounded-md hidden xl:block">
         {users && users.length > 0 ? (
           users.map((user) => (
             <User

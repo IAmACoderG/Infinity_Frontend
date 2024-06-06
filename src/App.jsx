@@ -12,7 +12,7 @@ const App = () => {
   }, [dispatch]);
 
   return (
-    <div className = "bg-white">
+    <div className = "bg-white overflow-hidden">
       {isAuthenticated && <Header />}
       <Outlet />
     </div>

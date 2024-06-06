@@ -1,6 +1,6 @@
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { Avatar, Button, Typography, Dialog } from "@mui/material";
+import { Avatar, Typography, Dialog } from "@mui/material";
 import { CommentBox, DotBox, LikeBox } from "../index";
 import {
   MoreHoriz,
@@ -9,10 +9,11 @@ import {
   ChatBubbleOutline,
 } from "@mui/icons-material";
 import { useEffect, useState } from "react";
-import { likePost } from "../../redux/actions/postActions";
+import { commentOnPost, likePost } from "../../redux/actions/postActions";
 import {
   getMyPosts,
   getPostFollowingUser,
+  getUserPosts,
 } from "../../redux/actions/userActions";
 const Post = ({
   postId,
@@ -29,14 +30,25 @@ const Post = ({
   const [like, setLike] = useState(false);
   const [toggleLikedUser, setToggleLikedUser] = useState(false);
   const [commentToggle, setCommentToggle] = useState(false);
+  const [addComment, setAddComment] = useState("");
   const [dots, setDots] = useState(false);
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.user);
+  const { id } = useParams();
 
   const handleLike = () => {
     setLike(!like);
     dispatch(likePost(postId));
     !isAccount ? dispatch(getPostFollowingUser()) : dispatch(getMyPosts());
+    dispatch(getUserPosts(id));
+  };
+
+  const commentSubmitHandler = async (e) => {
+    e.preventDefault();
+    await dispatch(commentOnPost(postId, addComment));
+    !isAccount ? dispatch(getPostFollowingUser()) : dispatch(getMyPosts());
+    setAddComment("");
+    dispatch(getUserPosts(id));
   };
 
   useEffect(() => {
@@ -44,14 +56,13 @@ const Post = ({
       if (preLike._id === user._id) setLike(true);
     });
   }, [likes, user._id]);
-
   return (
     <div className="bg-blue-950 shadow-md rounded-sm flex flex-col items-center justify-center">
       <div className="flex justify-between w-[60%] pb-3 pt-5">
         <div>
           <Link
             to={`/users/${postOwnerId}`}
-            className="transition-all duration-300 flex items-center gap-2"
+            className="transition-all hover:scale-90 duration-300 flex items-center gap-2"
           >
             <Avatar
               src={postOwnerAvatar}
@@ -93,11 +104,34 @@ const Post = ({
         <Typography fontWeight={500}>{postOwnerName}</Typography>
         <p>{caption}</p>
       </div>
-      <div className=" w-[60%] flex justify-start my-2">
-        <Typography className="text-blue-100" fontWeight={500}>
-          View all {comments.length} comments
-        </Typography>
+      <div
+        onClick={() => setCommentToggle(!commentToggle)}
+        className=" w-[60%] flex justify-start my-1  cursor-pointer"
+      >
+        {comments && comments.length > 0 ? (
+          <Typography className="text-gray-400" fontWeight={500}>
+            View all {comments.length} comments
+          </Typography>
+        ) : (
+          <Typography className="text-gray-400" fontWeight={500}>
+            Be the First One To Comment This Post
+          </Typography>
+        )}
       </div>
+
+      <form
+        onSubmit={commentSubmitHandler}
+        className=" w-[60%] flex justify-start my-1"
+      >
+        <input
+          className="bg-transparent w-full outline-none"
+          type="text"
+          placeholder="Add a Comment... "
+          value={addComment}
+          onChange={(e) => setAddComment(e.target.value)}
+        />
+        {addComment.length > 0 && <button type="submit">Post</button>}
+      </form>
       <Dialog open={dots} onClose={() => setDots(!dots)}>
         <div>
           <DotBox />
@@ -116,7 +150,16 @@ const Post = ({
         onClose={() => setCommentToggle(!commentToggle)}
       >
         <div>
-          <CommentBox />
+          <CommentBox
+            addComment={addComment}
+            setAddComment={setAddComment}
+            postOwnerAvatar={postOwnerAvatar}
+            postOwnerName={postOwnerName}
+            caption={caption}
+            postOwnerId={postOwnerId}
+            comments={comments}
+            commentSubmitHandler={commentSubmitHandler}
+          />
         </div>
       </Dialog>
       <div className=" w-[60%] h-[1px] bg-white my-4"></div>

@@ -5,6 +5,7 @@ import { allUsersFailure, allUsersRequest, allUsersSuccess } from "../feature/al
 import { getMyPostFailure, getMyPostRequest, getMyPostSuccess } from "../feature/getMyPostSlice";
 import { getUserPostFailure, getUserPostRequest, getUserPostSuccess } from "../feature/getUserPostSlice";
 import { userProfileFailure, userProfileRequest, userProfileSuccess } from "../feature/getUserProfileSlice"
+import { followFailure, followRequest, followSuccess } from "../feature/followSlice";
 
 export const loginUser = (email, password) => async (dispatch) => {
     try {
@@ -77,6 +78,16 @@ export const getAllUsers = () => async (dispatch) => {
         dispatch(allUsersSuccess(data.data));
     } catch (error) {
         dispatch(allUsersFailure(error.response.data.message));
+    }
+};
+
+export const followAccess = (id) => async (dispatch) => {
+    try {
+        dispatch(followRequest())
+        const { data } = await axiosInstance.get(`/api/v1/users/follow/${id}`);
+        dispatch(followSuccess(data.message))
+    } catch (error) {
+        dispatch(followFailure(error.reponse.data.message))
     }
 };
 

@@ -1,4 +1,10 @@
-import { Post, Loader, AccountManager } from "../../components";
+import {
+  Post,
+  Loader,
+  AccountManager,
+  FollowingBox,
+  FollowerBox,
+} from "../../components";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { getMyPosts, logOutUser } from "../../redux/actions/userActions";
@@ -10,12 +16,20 @@ const MyProfile = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [manageAccountToggle, setManageAccountToggle] = useState(false);
+  const [followingToggle, setFollowingToggle] = useState(false);
+  const [followerToggle, setFollowerToggle] = useState(false);
   const { loading, posts } = useSelector((state) => state.myPosts);
   const { user } = useSelector((state) => state.user);
-  console.log("user:- ", user);
 
   const accountToggleHandler = () => {
     setManageAccountToggle(!manageAccountToggle);
+  };
+
+  const followingHandler = () => {
+    setFollowingToggle(!followingToggle);
+  };
+  const followerHandler = () => {
+    setFollowerToggle(!followerToggle);
   };
 
   const logoutHandler = async () => {
@@ -25,9 +39,7 @@ const MyProfile = () => {
   };
 
   useEffect(() => {
-    console.log("useEffect-1");
     dispatch(getMyPosts());
-    console.log("useEffect-2");
   }, []);
   return !loading ? (
     <div className="min-h-[100vh] ml-[257px] text-white w-[85vw] bg-blue-950">
@@ -36,7 +48,7 @@ const MyProfile = () => {
           <div className="w-[70vw] absolute top-10 right-50 flex flex-col justify-start items-center">
             <div className="m-1 p-1 flex justify-start items-center">
               <div className="m-1 py-1 px-3 text-2xl font-semibold">
-                {user.username}
+                {user && user.username}
               </div>
               <button className="m-1 py-1 px-4 bg-blue-950 rounded-md">
                 Edit Profile
@@ -57,18 +69,24 @@ const MyProfile = () => {
             </div>
             <div className="m-1 p-1 flex justify-start items-center">
               <button className="m-1 py-1 px-3 rounded-md">
-                {user.posts.length} Post
+                {user && user.posts.length} Post
               </button>
-              <button className="m-1 py-1 px-3 rounded-md">
-                {user.follower.length} followers
+              <button
+                onClick={followerHandler}
+                className="m-1 py-1 px-3 rounded-md"
+              >
+                {user && user.follower.length} followers
               </button>
-              <button className="m-1 py-1 px-3 rounded-md">
-                {user.following.length} following
+              <button
+                onClick={followingHandler}
+                className="m-1 py-1 px-3 rounded-md"
+              >
+                {user && user.following.length} following
               </button>
             </div>
             <div className="m-1 p-1 text-2xl font-thin flex justify-start">
               <button className="m-1 py-1 px-3 rounded-md">
-                {user.fullName}
+                {user && user.fullName}
               </button>
             </div>
           </div>
@@ -76,7 +94,7 @@ const MyProfile = () => {
         <div className="w-60 h-60 rounded-full border-2 border-white relative left-20 bottom-36 bg-gradient-to-r from-pink-900 from to-blue-950 ">
           <Avatar
             className="transition-all hover:scale-105 duration-300 rounded-md"
-            src={user.avatar}
+            src={user && user.avatar}
             alt=""
             sx={{
               height: "31vh",
@@ -113,6 +131,18 @@ const MyProfile = () => {
         <div>
           <AccountManager logout={logoutHandler} />
         </div>
+      </Dialog>
+      <Dialog
+        open={followingToggle}
+        onClose={() => setFollowingToggle(!followingToggle)}
+      >
+        <FollowingBox followingData={user && user.following} />
+      </Dialog>
+      <Dialog
+        open={followerToggle}
+        onClose={() => setFollowerToggle(!followerToggle)}
+      >
+        <FollowerBox followerData={user && user.follower} />
       </Dialog>
     </div>
   ) : (
